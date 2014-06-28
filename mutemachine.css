@@ -1,0 +1,30 @@
+.mutediv {
+  float: right;
+  position: relative;
+}
+
+.mute {
+  padding: 9px 0px 0px;
+}
+
+.mute.off {
+  color: #b3b3b3;
+}
+
+.mute.on {
+  color: black;
+}
+
+.mute:hover {
+  color: #0063dc;
+}
+
+.favdiv {
+  -webkit-animation-duration: 0.001s;
+  -webkit-animation-name: favoriteInserted;
+}
+
+@-webkit-keyframes favoriteInserted {
+  from { clip: rect(1px, auto, auto, auto); }
+  to { clip: rect(0px, auto, auto, auto); }
+}

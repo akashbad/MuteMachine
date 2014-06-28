@@ -1,0 +1,22 @@
+{
+  "manifest_version":2,
+  
+  "name":"MuteMachine",
+  "description": "Mute songs on HypeMachine",
+  "version":"1.0",
+
+  "content_scripts" : [
+    {
+      "matches": ["https://hypem.com/*", "http://hypem.com/*"],
+      "js": ["jquery.js","mutemachine.js"],
+      "css": ["mutemachine.css"],
+      "all_frames":true,
+      "run_at": "document_end"
+    }  
+  ],
+
+  "permissions" : [
+    "storage"
+  ]
+
+}
