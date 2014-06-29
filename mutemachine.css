@@ -1,6 +1,7 @@
 .mutediv {
   float: right;
   position: relative;
+  padding-right: 5px;
 }
 
 .mute {
@@ -17,6 +18,10 @@
 
 .mute:hover {
   color: #0063dc;
+}
+
+.section-track.muted {
+  background: #eee !important;
 }
 
 .favdiv {

@@ -5,12 +5,18 @@ var muteMachineEvent = document.createEvent("CustomEvent");
 muteMachineEvent.initCustomEvent("muteMachineEvent");
 
 $(function(){
+  $.each($(".favdiv"), function(index, element){
+    if($(element).siblings(".mutediv").length === 0) {
+      insertMuteButton(element);
+    }
+  });
   chrome.storage.sync.get("mute_list",function(obj){
     if(obj.hasOwnProperty("mute_list"))
     {
       mute_list = obj.mute_list;
       $.each(mute_list, function(key, value){
         $(".section-track[data-itemid="+key+"] .mute").removeClass("off").addClass("on");
+        $(".section-track[data-itemid="+key+"]").addClass("muted");
       });
       console.log(mute_list);
     }
@@ -36,8 +42,10 @@ var insertMuteButton = function(favorite) {
   $muteButton.find("a").click(mute_click);
   if(mute_list.hasOwnProperty(song_id)) {
     $muteButton.find("a").addClass("on");
+    $(favorite).closest(".section-track").addClass("muted");
   } else {
     $muteButton.find("a").addClass("off");
+    $(favorite).closest(".section-track").removeClass("muted");
   }
   $(favorite).after($muteButton);
 }
@@ -48,21 +56,26 @@ var mute_click = function(event){
   if($(event.target).hasClass("off")){
     mute_list[song_id] = true;
     $(event.target).removeClass("off").addClass("on");
+    $(event.target).closest(".section-track").addClass("muted");
   }
   else if($(event.target).hasClass("on")){
     delete mute_list[song_id];
     $(event.target).removeClass("on").addClass("off");
+    $(event.target).closest(".section-track").removeClass("muted");
   }
   chrome.storage.sync.set({"mute_list": mute_list});
 }
 
+//Custom css will fire this event everytime a new favorite button is added to the UI
+//this allows us to insert a mute button adjacent to this favorite
 var insertListener = function(event){
   if(event.animationName == "favoriteInserted") {
     insertMuteButton(event.target);
   }
 }
-
 document.addEventListener("webkitAnimationStart", insertListener, false);
+
+//We need to inject a call to hypemachine scripts to actually skip the track
 var skip_track_code = "document.addEventListener('muteMachineEvent', function(e){nextTrack();});"
 var script = document.createElement('script');
 script.textContent = skip_track_code;
